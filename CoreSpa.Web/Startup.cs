@@ -44,8 +44,14 @@ namespace CoreSpa.Web
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
 
+            var facebookAuthSettings = Configuration.GetSection(nameof(FacebookAuthSettings));
+
             services.AddAuthentication()
-                .AddFacebook();
+                .AddFacebook(o =>
+                {
+                    o.AppId = facebookAuthSettings[nameof(FacebookAuthSettings.AppId)];
+                    o.AppSecret = facebookAuthSettings[nameof(FacebookAuthSettings.AppSecret)];
+                });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -57,8 +63,10 @@ namespace CoreSpa.Web
 
             services.AddSingleton<IJwtFactory, JwtFactory>();
 
+
+
             // Register the ConfigurationBuilder instance of FacebookAuthSettings
-            services.Configure<FacebookAuthSettings>(Configuration.GetSection(nameof(FacebookAuthSettings)));
+            services.Configure<FacebookAuthSettings>(facebookAuthSettings);
 
             services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -105,7 +113,11 @@ namespace CoreSpa.Web
             // api user claim policy
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.ApiAccess));
+                options.AddPolicy("ApiUser", policy =>
+                {
+                    policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol,
+                        Constants.Strings.JwtClaims.ApiAccess);
+                });
             });
 
 
@@ -139,6 +151,7 @@ namespace CoreSpa.Web
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
