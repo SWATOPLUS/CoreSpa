@@ -13,7 +13,6 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { HeaderComponent } from './header/header.component';
 
 /* Account Imports */
 import { AccountModule }  from './account/account.module';
@@ -25,7 +24,6 @@ import { ConfigService } from './shared/utils/config.service';
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
     HomeComponent,
     NavMenuComponent,
     HomeComponent,
