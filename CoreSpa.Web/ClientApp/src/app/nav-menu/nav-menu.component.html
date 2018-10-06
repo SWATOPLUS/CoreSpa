@@ -27,6 +27,31 @@
                         <span class='glyphicon glyphicon-th-list'></span> Fetch data
                     </a>
                 </li>
+                <li [routerLinkActive]='["link-active"]' *ngIf="status">
+                    <a (click)="logout()" href="#">
+                        <span class='glyphicon glyphicon-log-out'></span>  Logoff
+                    </a>
+                </li>
+                <li [routerLinkActive]='["link-active"]' *ngIf="status">
+                    <a [routerLink]='["/dashboard"]' class="nav-link">
+                        <span class='glyphicon glyphicon-th-list'></span> Dashboard
+                    </a> 
+                </li>         
+                <li [routerLinkActive]='["link-active"]' *ngIf="!status">
+                    <a [routerLink]='["/account/register"]' class="nav-link">
+                        <span class='glyphicon glyphicon-log-in'></span> Email signup
+                    </a>
+                  </li>
+                <li [routerLinkActive]='["link-active"]' *ngIf="!status">
+                    <a [routerLink]='["/account/login"]' class="nav-link">
+                        <span class='glyphicon glyphicon-log-in'></span> Email login
+                    </a>
+                </li>
+                <li [routerLinkActive]='["link-active"]' *ngIf="!status">
+                    <a [routerLink]='["/account/facebook-login"]' class="nav-link">
+                        <span class='glyphicon glyphicon-user'></span> Facebook signup/login
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
