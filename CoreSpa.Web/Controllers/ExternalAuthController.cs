@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CoreSpa.Data.Entities;
 using CoreSpa.Web.Auth;
 using CoreSpa.Web.Helpers;
+using CoreSpa.Web.Helpers.Constants;
 using CoreSpa.Web.Models;
 using CoreSpa.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -83,7 +84,9 @@ namespace CoreSpa.Web.Controllers
         return BadRequest(Errors.AddErrorToModelState("login_failure", "Failed to create local user account.", ModelState));
       }
 
-      var jwt = await Tokens.GenerateJwt(_jwtFactory.GenerateClaimsIdentity(localUser.UserName, localUser.Id),
+        var isAdmin = await _userManager.IsInRoleAsync(user, Roles.Admin);
+
+      var jwt = await Tokens.GenerateJwt(_jwtFactory.GenerateClaimsIdentity(localUser.UserName, localUser.Id, isAdmin),
         _jwtFactory, localUser.UserName, _jwtOptions, new JsonSerializerSettings {Formatting = Formatting.Indented});
   
       return new OkObjectResult(jwt);

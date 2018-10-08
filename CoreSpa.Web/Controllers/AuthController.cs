@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CoreSpa.Data.Entities;
 using CoreSpa.Web.Auth;
 using CoreSpa.Web.Helpers;
+using CoreSpa.Web.Helpers.Constants;
 using CoreSpa.Web.Models;
 using CoreSpa.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -58,7 +59,8 @@ namespace CoreSpa.Web.Controllers
             // check the credentials
             if (await _userManager.CheckPasswordAsync(userToVerify, password))
             {
-                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id));
+                var isAdmin = await _userManager.IsInRoleAsync(userToVerify, Roles.Admin);
+                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id, isAdmin));
             }
 
             // Credentials are invalid, or account doesn't exist

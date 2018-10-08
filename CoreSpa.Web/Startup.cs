@@ -5,6 +5,7 @@ using CoreSpa.Data;
 using CoreSpa.Data.Entities;
 using CoreSpa.Web.Auth;
 using CoreSpa.Web.Helpers;
+using CoreSpa.Web.Helpers.Constants;
 using CoreSpa.Web.Models;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -113,10 +114,14 @@ namespace CoreSpa.Web
             // api user claim policy
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ApiUser", policy =>
+                options.AddPolicy(ApiPolicies.ApiUser, policy =>
                 {
-                    policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol,
-                        Constants.Strings.JwtClaims.ApiAccess);
+                    policy.RequireClaim(JwtClaimIdentifiers.Id);
+                });
+
+                options.AddPolicy(ApiPolicies.ApiAdmin, policy =>
+                {
+                    policy.RequireClaim(JwtClaimIdentifiers.Admin);
                 });
             });
 

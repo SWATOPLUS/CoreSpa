@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using CoreSpa.Web.Helpers.Constants;
 using CoreSpa.Web.Models;
 using Microsoft.Extensions.Options;
 
@@ -20,14 +22,21 @@ namespace CoreSpa.Web.Auth
 
         public async Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity)
         {
-            var claims = new[]
-         {
-                 new Claim(JwtRegisteredClaimNames.Sub, userName),
-                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
-                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
-                 identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol),
-                 identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Id)
-             };
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, userName),
+                new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
+                new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(),
+                    ClaimValueTypes.Integer64),
+                identity.FindFirst(JwtClaimIdentifiers.Id)
+            };
+
+            var adminClaim = identity.FindFirst(JwtClaimIdentifiers.Admin);
+
+            if (adminClaim != null)
+            {
+                claims.Add(adminClaim);
+            }
 
             // Create the JWT security token and encode it.
             var jwt = new JwtSecurityToken(
@@ -43,13 +52,19 @@ namespace CoreSpa.Web.Auth
             return encodedJwt;
         }
 
-        public ClaimsIdentity GenerateClaimsIdentity(string userName, string id)
+        public ClaimsIdentity GenerateClaimsIdentity(string userName, string id, bool isAdmin)
         {
-            return new ClaimsIdentity(new GenericIdentity(userName, "Token"), new[]
+            var identity = new GenericIdentity(userName, "Token");
+            var idClaim = new Claim(JwtClaimIdentifiers.Id, id);
+
+            if (!isAdmin)
             {
-                new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.Id, id),
-                new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol, Helpers.Constants.Strings.JwtClaims.ApiAccess)
-            });
+                return new ClaimsIdentity(identity, new[] {idClaim});
+            }
+
+            var adminClaim = new Claim(JwtClaimIdentifiers.Admin, 1.ToString(), ClaimValueTypes.Integer);
+
+            return new ClaimsIdentity(identity, new[] { idClaim, adminClaim });
         }
 
         /// <returns>Date converted to seconds since Unix epoch (Jan 1, 1970, midnight UTC).</returns>

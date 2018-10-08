@@ -1,18 +1,19 @@
-﻿namespace CoreSpa.Web.Helpers
+﻿namespace CoreSpa.Web.Helpers.Constants
 {
-    public static class Constants
+    public static class ApiPolicies
     {
-        public static class Strings
-        {
-            public static class JwtClaimIdentifiers
-            {
-                public const string Rol = "rol", Id = "id";
-            }
+        public const string ApiUser = "ApiUser";
+        public const string ApiAdmin = "ApiAdmin";
+    }
 
-            public static class JwtClaims
-            {
-                public const string ApiAccess = "api_access";
-            }
-        }
+    public static class Roles
+    {
+        public const string Admin = "Admin";
+    }
+
+    public static class JwtClaimIdentifiers
+    {
+        public const string Admin = "admin";
+        public const string Id = "id";
     }
 }
