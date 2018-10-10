@@ -35,17 +35,7 @@ namespace CoreSpa.Web.Controllers
             var userId = _caller.Claims.Single(c => c.Type == "id");
             var customer = _appDbContext.Customers.Single(c => c.IdentityId == userId.Value);
 
-            return new OkObjectResult(new
-            {
-                Message = "This is secure API and user data!",
-                customer.Identity.FirstName,
-                customer.Identity.LastName,
-                customer.Identity.PictureUrl,
-                customer.Identity.FacebookId,
-                customer.Location,
-                customer.Locale,
-                customer.Gender
-            });
+            return new OkObjectResult(customer);
         }
 
         [HttpGet]
@@ -53,38 +43,28 @@ namespace CoreSpa.Web.Controllers
         {
             var customer = await _appDbContext.Customers.SingleAsync(x => x.CustomerId == customerId);
 
-            return new OkObjectResult(new
-            {
-                customer.Identity.FirstName,
-                customer.Identity.LastName,
-                customer.Identity.PictureUrl,
-                customer.Identity.FacebookId,
-                customer.Location,
-                customer.Locale,
-                customer.Gender
-            });
+            return new OkObjectResult(customer);
         }
 
         [HttpPost]
         [Authorize(ApiPolicies.ApiUser)]
-        public async Task<IActionResult> Profile(Customer customerDto)
+        public async Task<IActionResult> Profile([FromBody] Customer changes)
         {
-            if (customerDto == null || customerDto.CustomerId == 0)
+            if (changes == null || changes.CustomerId == 0)
             {
                 return BadRequest();
             }
 
             var userId = _caller.Claims.Single(c => c.Type == "id").Value;
 
-            var customer = _appDbContext.Customers.Single(x => x.CustomerId == customerDto.CustomerId);
+            var customer = _appDbContext.Customers.Single(x => x.CustomerId == changes.CustomerId);
 
             if (!this.IsAdmin() && customer.IdentityId != userId)
             {
                 return Unauthorized();
             }
 
-            customer.Gender = customerDto.Gender;
-            customer.Location = customerDto.Location;
+            customer.ApplyChanges(changes);
 
             _appDbContext.Customers.Update(customer);
             _appDbContext.SaveChanges();

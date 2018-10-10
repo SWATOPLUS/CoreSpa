@@ -1,4 +1,6 @@
 export interface HomeDetails {
+  displayName: string;
+  customerId: number;
   message: string;
   firstName: string;
   lastName: string;

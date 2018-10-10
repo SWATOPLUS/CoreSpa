@@ -15,15 +15,32 @@ export class HomeComponent implements OnInit {
   constructor(private dashboardService: DashboardService) { }
 
   ngOnInit() {
+    this.updateData();
+  }
 
+  updateData(){
     this.dashboardService.getHomeDetails()
     .subscribe((homeDetails: HomeDetails) => {
       this.homeDetails = homeDetails;
     },
     error => {
       //this.notificationService.printErrorMessage(error);
-    });
-    
+    });    
   }
 
+  onChanged($event){    
+    const profile = {
+      customerId: this.homeDetails.customerId,
+    }
+
+    profile[$event.name] = $event.value;
+
+    this.dashboardService
+      .updateProfile(profile)
+      .subscribe(result => { }, error => {
+        //this.notificationService.printErrorMessage(error);
+      });
+
+    this.updateData();
+  }
 }

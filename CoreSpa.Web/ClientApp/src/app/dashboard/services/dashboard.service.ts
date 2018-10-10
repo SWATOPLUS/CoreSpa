@@ -22,14 +22,28 @@ export class DashboardService extends BaseService {
      this.baseUrl = configService.getApiURI();
   }
 
+  buildHeaders() : Headers{
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers.append('Authorization', `Bearer ${authToken}`);
+
+    return headers;
+  }
+
   getHomeDetails(): Observable<HomeDetails> {
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      let authToken = localStorage.getItem('auth_token');
-      headers.append('Authorization', `Bearer ${authToken}`);
+    var headers = this.buildHeaders();
   
-    return this.http.get(this.baseUrl + "/dashboard/home",{headers})
+    return this.http.get(this.baseUrl + "/dashboard/home", {headers})
       .map(response => response.json())
       .catch(this.handleError);
-  }  
+  }
+
+  updateProfile(profile){
+    var headers = this.buildHeaders();
+     
+    return this.http.post(this.baseUrl + "/dashboard/profile", profile, {headers})
+      .map(response => response.json())
+      .catch(this.handleError);
+  }
 }
