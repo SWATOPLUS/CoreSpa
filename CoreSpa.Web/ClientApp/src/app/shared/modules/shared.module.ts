@@ -8,12 +8,25 @@ import { CommonModule }       from '@angular/common';
  
 import { myFocus } from '../../directives/focus.directive';
 import {SpinnerComponent} from '../../spinner/spinner.component';  
+import { ApproveInputComponent } from '../components/approve-input/approve-input.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
-  imports:      [CommonModule],
-  declarations: [myFocus,SpinnerComponent],
-  exports:      [myFocus,SpinnerComponent],
-  providers:    []
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
+  declarations: [
+    myFocus,
+    SpinnerComponent,
+    ApproveInputComponent
+  ],
+  exports: [
+    myFocus,
+    SpinnerComponent,
+    ApproveInputComponent
+  ],
+  providers: []
 })
 export class SharedModule { }

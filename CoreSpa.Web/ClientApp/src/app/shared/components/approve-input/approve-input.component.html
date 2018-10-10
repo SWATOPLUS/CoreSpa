@@ -1,0 +1,14 @@
+<div class="input-group">
+  <input type="text" [(ngModel)]="inputText" (ngModelChange)="onTyped($event)" class="form-control" />
+
+  <div class="input-group-btn" [ngClass]="{'active' : isDirty}" (click)="onSave()">
+    <button class="btn btn-default" [ngClass]="{'disabled' : !isDirty}">
+      <span class="glyphicon glyphicon-ok" style="color: green"></span>
+    </button>
+  </div>
+  <div class="input-group-btn" [ngClass]="{'active' : isDirty}" (click)="onCancel()">
+    <button class="btn btn-default" [ngClass]="{'disabled' : !isDirty}">
+      <span class="glyphicon glyphicon-remove" style="color: red"></span>
+    </button>
+  </div>
+</div>

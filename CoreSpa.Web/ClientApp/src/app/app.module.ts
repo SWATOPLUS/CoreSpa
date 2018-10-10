@@ -20,6 +20,7 @@ import { AccountModule }  from './account/account.module';
 import { DashboardModule }  from './dashboard/dashboard.module';
 
 import { ConfigService } from './shared/utils/config.service';
+import { SharedModule } from './shared/modules/shared.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ConfigService } from './shared/utils/config.service';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    SharedModule,
     AccountModule,
     DashboardModule,
     HttpClientModule,
