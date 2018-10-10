@@ -38,7 +38,7 @@ namespace CoreSpa.Web.Controllers
             return new OkObjectResult(customer);
         }
 
-        [HttpGet]
+        [HttpGet("{customerId}")]
         public async Task<IActionResult> Profile(int customerId)
         {
             var customer = await _appDbContext.Customers.SingleAsync(x => x.CustomerId == customerId);

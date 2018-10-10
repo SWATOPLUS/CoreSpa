@@ -6,10 +6,10 @@ import { SharedModule }       from '../shared/modules/shared.module';
 import { routing }  from './dashboard.routing';
 import { RootComponent } from './root/root.component';
 import { HomeComponent } from './home/home.component';
-import { DashboardService } from './services/dashboard.service';
 
 import { AuthGuard } from '../auth.guard';
 import { SettingsComponent } from './settings/settings.component';
+import { DashboardService } from './dashboard.service';
 
 
 @NgModule({

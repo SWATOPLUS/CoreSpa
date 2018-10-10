@@ -1,4 +1,4 @@
-export interface HomeDetails {
+export interface DashbordProfile {
   displayName: string;
   customerId: number;
   message: string;

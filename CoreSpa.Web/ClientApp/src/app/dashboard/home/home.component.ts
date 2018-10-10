@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
-import { HomeDetails } from '../models/home.details.interface';
-import { DashboardService } from '../services/dashboard.service';
+import { DashboardService } from '../dashboard.service';
+import { DashbordProfile } from '../profile.interface';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +9,7 @@ import { DashboardService } from '../services/dashboard.service';
 })
 export class HomeComponent implements OnInit {
 
-  homeDetails: HomeDetails;
+  homeDetails: DashbordProfile;
 
   constructor(private dashboardService: DashboardService) { }
 
@@ -20,7 +19,7 @@ export class HomeComponent implements OnInit {
 
   updateData(){
     this.dashboardService.getHomeDetails()
-    .subscribe((homeDetails: HomeDetails) => {
+    .subscribe((homeDetails: DashbordProfile) => {
       this.homeDetails = homeDetails;
     },
     error => {
