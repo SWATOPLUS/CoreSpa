@@ -19,6 +19,10 @@ import { DashboardModule }  from './dashboard/dashboard.module';
 import { ConfigService } from './shared/utils/config.service';
 import { SharedModule } from './shared/modules/shared.module';
 import { ArticleModule } from './article/article.module';
+import { GridModule } from '@progress/kendo-angular-grid';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 
 @NgModule({
   declarations: [
@@ -36,7 +40,9 @@ import { ArticleModule } from './article/article.module';
     HttpClientModule,
     FormsModule,
     HttpModule,
-    AppRouting
+    AppRouting,
+    GridModule,
+    BrowserAnimationsModule
   ],
   providers: [ConfigService, { 
     provide: XHRBackend, 

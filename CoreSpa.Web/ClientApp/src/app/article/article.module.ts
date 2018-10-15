@@ -8,12 +8,15 @@ import { RootComponent } from './components/root/root.component';
 import { HomeComponent } from './components/home/home.component';
 import { ArticleComponent } from './components/article/article.component';
 import { RouterModule } from '@angular/router';
+import { GridModule } from '@progress/kendo-angular-grid';
+import { ArticleService } from './article.service';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     SharedModule,
+    GridModule,
     RouterModule.forChild([{
         path: 'articles',
         component: RootComponent, canActivate: [AuthGuard],
@@ -31,6 +34,9 @@ import { RouterModule } from '@angular/router';
     ArticleComponent
   ],
   exports: [],
-  providers: [AuthGuard]
+  providers: [
+    AuthGuard,
+    ArticleService
+  ]
 })
 export class ArticleModule { }

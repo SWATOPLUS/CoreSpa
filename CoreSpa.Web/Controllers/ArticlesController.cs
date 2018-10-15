@@ -30,16 +30,10 @@ namespace CoreSpa.Web.Controllers
             _appDbContext = appDbContext;
         }
 
-        [HttpPost]
-        public IActionResult Get([DataSourceRequest]DataSourceRequest request)
-        {
-            return Json(GetArticleSummaries().ToDataSourceResult( request));
-        }
-
         [HttpGet]
-        public IActionResult ListArticle()
+        public IActionResult ListArticle([DataSourceRequest]DataSourceRequest request)
         {
-            return Json(GetArticleSummaries().ToArray());
+            return Json(GetArticleSummaries().ToDataSourceResult(request));
         }
 
         [HttpGet]
@@ -132,7 +126,7 @@ namespace CoreSpa.Web.Controllers
                     CustomerId = x.CustomerId,
                     CustomerDisplayName = x.Customer.DisplayName,
                     CommentsCount = x.Comments.Count,
-                    RatesAverage = x.Rates.Select(r => r.Mark).Average(),
+                    RatesAverage = x.Rates.Select(r => r.Mark).DefaultIfEmpty(0).Average(),
                     RatesCount = x.Rates.Count,
                     Summary = x.Summary,
                     Tags = x.Tags.Select(t => t.Tag).ToArray(),

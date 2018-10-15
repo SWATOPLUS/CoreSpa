@@ -1,3 +1,23 @@
-<p>
-  home works!
-</p>
+<kendo-grid
+[data]="products"
+[pageSize]="state.take"
+[skip]="state.skip"
+[sort]="state.sort"
+[sortable]="true"
+[pageable]="true"
+[scrollable]="'scrollable'"
+[groupable]="true"
+[group]="state.group"
+[filterable]="true"
+[filter]="state.filter"
+(dataStateChange)="dataStateChange($event)"
+[height]="370">
+
+  <kendo-grid-column field="articleId" title="ID" width="80">
+  </kendo-grid-column>
+  <kendo-grid-column field="title" title="Title">
+  </kendo-grid-column>
+  <kendo-grid-column field="customerDisplayName" title="Author" width="230">
+  </kendo-grid-column>
+
+</kendo-grid>
