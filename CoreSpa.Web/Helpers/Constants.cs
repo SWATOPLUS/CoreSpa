@@ -15,5 +15,6 @@
     {
         public const string Admin = "admin";
         public const string Id = "id";
+        public const string CustomerId = "customerid";
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CoreSpa.Data.Entities;
 using CoreSpa.Web.Auth;
@@ -16,12 +17,20 @@ namespace CoreSpa.Web.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
+        private readonly ApplicationDbContext _appDbContext;
         private readonly UserManager<AppUser> _userManager;
         private readonly IJwtFactory _jwtFactory;
         private readonly JwtIssuerOptions _jwtOptions;
 
-        public AuthController(UserManager<AppUser> userManager, IJwtFactory jwtFactory, IOptions<JwtIssuerOptions> jwtOptions)
+        public AuthController
+        (
+            ApplicationDbContext appDbContext,
+            UserManager<AppUser> userManager,
+            IJwtFactory jwtFactory,
+            IOptions<JwtIssuerOptions> jwtOptions
+        )
         {
+            _appDbContext = appDbContext;
             _userManager = userManager;
             _jwtFactory = jwtFactory;
             _jwtOptions = jwtOptions.Value;
@@ -60,7 +69,13 @@ namespace CoreSpa.Web.Controllers
             if (await _userManager.CheckPasswordAsync(userToVerify, password))
             {
                 var isAdmin = await _userManager.IsInRoleAsync(userToVerify, Roles.Admin);
-                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id, isAdmin));
+
+                var customerId = _appDbContext.Customers
+                    .Where(x => x.IdentityId == userToVerify.Id)
+                    .Select(x => x.CustomerId)
+                    .Single();
+
+                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id, customerId, isAdmin));
             }
 
             // Credentials are invalid, or account doesn't exist

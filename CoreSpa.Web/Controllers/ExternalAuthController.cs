@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CoreSpa.Data.Entities;
@@ -93,7 +94,12 @@ namespace CoreSpa.Web.Controllers
 
         var isAdmin = await _userManager.IsInRoleAsync(user, Roles.Admin);
 
-      var jwt = await Tokens.GenerateJwt(_jwtFactory.GenerateClaimsIdentity(localUser.UserName, localUser.Id, isAdmin),
+        var customerId = _appDbContext.Customers
+            .Where(x => x.IdentityId == localUser.Id)
+            .Select(x => x.CustomerId)
+            .Single();
+
+      var jwt = await Tokens.GenerateJwt(_jwtFactory.GenerateClaimsIdentity(localUser.UserName, localUser.Id, customerId, isAdmin),
         _jwtFactory, localUser.UserName, _jwtOptions, new JsonSerializerSettings {Formatting = Formatting.Indented});
   
       return new OkObjectResult(jwt);

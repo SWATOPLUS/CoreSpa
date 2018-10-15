@@ -32,7 +32,7 @@ namespace CoreSpa.Web.Controllers
         {
             // retrieve the user info
             //HttpContext.User
-            var userId = _caller.Claims.Single(c => c.Type == "id");
+            var userId = _caller.Claims.Single(c => c.Type == JwtClaimIdentifiers.Id);
             var customer = _appDbContext.Customers.Single(c => c.IdentityId == userId.Value);
 
             return new OkObjectResult(customer);
@@ -55,7 +55,7 @@ namespace CoreSpa.Web.Controllers
                 return BadRequest();
             }
 
-            var userId = _caller.Claims.Single(c => c.Type == "id").Value;
+            var userId = _caller.Claims.Single(c => c.Type == JwtClaimIdentifiers.Id).Value;
 
             var customer = _appDbContext.Customers.Single(x => x.CustomerId == changes.CustomerId);
 

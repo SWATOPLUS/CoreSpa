@@ -1,4 +1,6 @@
-﻿namespace CoreSpa.Data.Entities
+﻿using System.Collections.Generic;
+
+namespace CoreSpa.Data.Entities
 {
     public class Customer
     {
@@ -14,5 +16,9 @@
         public string LastName { get; set; }
         public string DisplayName { get; set; }
         public string PictureUrl { get; set; }
+
+        public ICollection<Article> Articles { get; set; }
+
+        public ICollection<Comment> Comments { get; set; }
     }
 }

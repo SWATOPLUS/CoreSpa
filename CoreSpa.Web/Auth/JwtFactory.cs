@@ -28,7 +28,8 @@ namespace CoreSpa.Web.Auth
                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(),
                     ClaimValueTypes.Integer64),
-                identity.FindFirst(JwtClaimIdentifiers.Id)
+                identity.FindFirst(JwtClaimIdentifiers.Id),
+                identity.FindFirst(JwtClaimIdentifiers.CustomerId)
             };
 
             var adminClaim = identity.FindFirst(JwtClaimIdentifiers.Admin);
@@ -52,19 +53,19 @@ namespace CoreSpa.Web.Auth
             return encodedJwt;
         }
 
-        public ClaimsIdentity GenerateClaimsIdentity(string userName, string id, bool isAdmin)
+        public ClaimsIdentity GenerateClaimsIdentity(string userName, string userId, int customerId, bool isAdmin)
         {
             var identity = new GenericIdentity(userName, "Token");
-            var idClaim = new Claim(JwtClaimIdentifiers.Id, id);
-
+            var idClaim = new Claim(JwtClaimIdentifiers.Id, userId);
+            var customerClaim = new Claim(JwtClaimIdentifiers.CustomerId, $"{customerId}", ClaimValueTypes.Integer);
             if (!isAdmin)
             {
-                return new ClaimsIdentity(identity, new[] {idClaim});
+                return new ClaimsIdentity(identity, new[] {idClaim, customerClaim});
             }
 
             var adminClaim = new Claim(JwtClaimIdentifiers.Admin, 1.ToString(), ClaimValueTypes.Integer);
 
-            return new ClaimsIdentity(identity, new[] { idClaim, adminClaim });
+            return new ClaimsIdentity(identity, new[] { idClaim, customerClaim, adminClaim });
         }
 
         /// <returns>Date converted to seconds since Unix epoch (Jan 1, 1970, midnight UTC).</returns>
