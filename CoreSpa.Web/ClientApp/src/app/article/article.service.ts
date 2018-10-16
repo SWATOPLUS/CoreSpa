@@ -4,8 +4,6 @@ import { GridDataResult } from '@progress/kendo-angular-grid';
 import { toODataString, DataSourceRequestState, toDataSourceRequestString, DataResult, translateDataSourceResultGroups } from '@progress/kendo-data-query';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { map } from 'rxjs/operators/map';
-import { tap } from 'rxjs/operators/tap';
 
 export abstract class BaseGridFetcher extends BehaviorSubject<GridDataResult> {
   public loading: boolean;
@@ -27,7 +25,7 @@ export abstract class BaseGridFetcher extends BehaviorSubject<GridDataResult> {
           // Convert the aggregates if such exist
           //aggregateResult: translateAggregateResults(aggregateResults)
         })
-      )
+      );
   }
 }
 

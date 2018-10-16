@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
 import {
-    GridDataResult,
-    DataStateChangeEvent
+  GridDataResult,
+  DataStateChangeEvent
 } from '@progress/kendo-angular-grid';
 import { ArticleService } from '../../article.service';
 
@@ -18,17 +17,23 @@ export class HomeComponent implements OnInit {
 
   public articles: GridDataResult;
   public state: DataSourceRequestState = {
-      skip: 0,
-      take: 5
+    skip: 0,
+    take: 5
   };
 
   constructor(private dataService: ArticleService) {
-      this.dataService.fetch(this.state).subscribe(r => this.articles = r);
+    this.refresh();
   }
 
   public dataStateChange(state: DataStateChangeEvent): void {
-      this.state = state;
-      this.dataService.fetch(state)
-          .subscribe(r => this.articles = r);
+    this.state = state;
+    this.refresh();
+  }
+
+  private refresh(){
+    this.dataService.fetch(this.state)
+      .subscribe(r => {
+        this.articles = r;
+      }, error => console.log(error));
   }
 }

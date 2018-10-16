@@ -20,7 +20,7 @@ export class ApproveInputComponent implements OnInit {
     this.inputText = this.value;
   }
 
-  onTyped(){
+  onTyped($event){
     this.isDirty = this.inputText != this.value;
   }
 
